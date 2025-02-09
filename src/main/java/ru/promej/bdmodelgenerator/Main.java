@@ -24,7 +24,7 @@ public class Main {
         setDarkTheme();
 
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("BDModelGenerator v1.0");
+            JFrame frame = new JFrame("BDModelGenerator v1.1");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(900, 280);
             frame.setLayout(new GridBagLayout());
