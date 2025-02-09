@@ -4,16 +4,208 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import org.mineskin.MineSkinClient;
 import org.mineskin.exception.MineSkinRequestException;
 import org.mineskin.response.MineSkinResponse;
 
+import javax.imageio.ImageIO;
+
 public class SkinManager {
 
+    public static void main(String[] args) {
+        BufferedImage skin = Utils.getSkin("https://s.namemc.com/i/a912449d4623b77d.png");
+
+        BufferedImage fullBody = createFullBodyAvatar(skin);
+
+        saveImage(genFakeSteve7(fullBody), "avatar");
+    }
+
+    public static BufferedImage createFullBodyAvatar(BufferedImage skin) {
+
+        if(Utils.validSkinSize(skin)){
+            boolean bl = skin.getRGB(54, 20) == 0 && skin.getRGB(50, 16) == 0;
+            if(bl){
+                skin = fixSlim(skin);
+
+            }
+        } else {
+            skin = fixLegacy(skin);
+            boolean bl = skin.getRGB(54, 20) == 0 && skin.getRGB(50, 16) == 0;
+            if(bl){
+                skin = fixSlim(skin);
+            }
+        }
+
+        if (skin.getWidth() != 64 || skin.getHeight() != 64) {
+            throw new IllegalArgumentException("size");
+        }
+
+        BufferedImage avatar = new BufferedImage(16, 32, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = avatar.createGraphics();
+
+        BufferedImage head = SkinManager.getClipResize(skin, new Integer[]{8, 8, 8, 8}, 8, 8);
+        g.drawImage(head, 4, 0, null);
+
+        BufferedImage overlayHead = SkinManager.getClipResize(skin, new Integer[]{40, 8, 8, 8}, 8, 8);
+        g.drawImage(overlayHead, 4, 0, null);
+
+        BufferedImage body = SkinManager.getClipResize(skin, new Integer[]{20, 20, 8, 12}, 12, 8);
+        g.drawImage(body, 4, 8, null);
+
+        BufferedImage bodyOverlay = SkinManager.getClipResize(skin, new Integer[]{20, 36, 8, 12}, 12, 8);
+        g.drawImage(bodyOverlay, 4, 8, null);
+
+        BufferedImage leftArm = SkinManager.getClipResize(skin, new Integer[]{44, 20, 4, 12}, 12, 4);
+        g.drawImage(leftArm, 0, 8, null);
+
+        BufferedImage leftArmOverlay = SkinManager.getClipResize(skin, new Integer[]{44, 36, 4, 12}, 12, 4);
+        g.drawImage(leftArmOverlay, 0, 8, null);
+
+        BufferedImage rightArm = SkinManager.getClipResize(skin, new Integer[]{36, 52, 4, 12}, 12, 4);
+        g.drawImage(rightArm, 12, 8, null);
+
+        BufferedImage rightArmOverlay = SkinManager.getClipResize(skin, new Integer[]{52, 52, 4, 12}, 12, 4);
+        g.drawImage(rightArmOverlay, 12, 8, null);
+
+        BufferedImage leftLeg = SkinManager.getClipResize(skin, new Integer[]{4, 20, 4, 12}, 12, 4);
+        g.drawImage(leftLeg, 4, 20, null);
+
+        BufferedImage leftLegOverlay = SkinManager.getClipResize(skin, new Integer[]{4, 36, 4, 12}, 12, 4);
+        g.drawImage(leftLegOverlay, 4, 20, null);
+
+        BufferedImage rightLeg = SkinManager.getClipResize(skin, new Integer[]{20, 52, 4, 12}, 12, 4);
+        g.drawImage(rightLeg, 8, 20, null);
+
+        BufferedImage rightLegOverlay = SkinManager.getClipResize(skin, new Integer[]{4, 52, 4, 12}, 12, 4);
+        g.drawImage(rightLegOverlay, 8, 20, null);
+
+        g.dispose();
+        return avatar;
+    }
+
+    public static BufferedImage loadImageFromResources(String fileName){
+        try (InputStream is = SkinManager.class.getClassLoader().getResourceAsStream(fileName)) {
+            if (is == null) {
+                throw new IOException("Ресурс не найден: " + fileName);
+            }
+            return ImageIO.read(is);
+        } catch (IOException e) {
+            return new BufferedImage(0, 0, 2);
+        }  
+    }
+
+    public static BufferedImage genFakeSteve1(BufferedImage avatar){
+
+        BufferedImage fakeHead = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = fakeHead.createGraphics();
+
+        BufferedImage texture = loadImageFromResources("image/fake/1.png");
+        g.drawImage(texture, null, 0,0);
+
+        BufferedImage head = SkinManager.getClipResize(avatar, new Integer[]{4, 24, 8, 8}, 8, 8);
+        g.drawImage(head, null, 8, 8);
+
+        return fakeHead;
+    }
+
+    public static BufferedImage genFakeSteve2(BufferedImage avatar){
+
+        BufferedImage fakeHead = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = fakeHead.createGraphics();
+
+        BufferedImage texture = loadImageFromResources("image/fake/2.png");
+        g.drawImage(texture, null, 0,0);
+
+        BufferedImage head = SkinManager.getClipResize(avatar, new Integer[]{4, 20, 8, 4}, 8, 8);
+        g.drawImage(head, null, 8, 8);
+
+        return fakeHead;
+    }
+
+    public static BufferedImage genFakeSteve3(BufferedImage avatar){
+
+        BufferedImage fakeHead = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = fakeHead.createGraphics();
+
+        BufferedImage texture = loadImageFromResources("image/fake/3.png");
+        g.drawImage(texture, null, 0,0);
+
+        BufferedImage head = SkinManager.getClipResize(avatar, new Integer[]{8, 12, 8, 8}, 8, 8);
+        g.drawImage(head, null, 8, 8);
+
+        return fakeHead;
+    }
+
+    public static BufferedImage genFakeSteve4(BufferedImage avatar){
+
+        BufferedImage fakeHead = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = fakeHead.createGraphics();
+
+        BufferedImage texture = loadImageFromResources("image/fake/4.png");
+        g.drawImage(texture, null, 0,0);
+
+        BufferedImage head = SkinManager.getClipResize(avatar, new Integer[]{0, 12, 8, 8}, 8, 8);
+        g.drawImage(head, null, 8, 8);
+
+        return fakeHead;
+    }
+
+    public static BufferedImage genFakeSteve5(BufferedImage avatar){
+
+        BufferedImage fakeHead = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = fakeHead.createGraphics();
+
+        BufferedImage texture = loadImageFromResources("image/fake/5.png");
+        g.drawImage(texture, null, 0,0);
+
+        BufferedImage head = SkinManager.getClipResize(avatar, new Integer[]{8, 8, 8, 4}, 8, 8);
+        g.drawImage(head, null, 8, 8);
+
+        return fakeHead;
+    }
+
+    public static BufferedImage genFakeSteve6(BufferedImage avatar){
+
+        BufferedImage fakeHead = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = fakeHead.createGraphics();
+
+        BufferedImage texture = loadImageFromResources("image/fake/6.png");
+        g.drawImage(texture, null, 0,0);
+
+        BufferedImage head = SkinManager.getClipResize(avatar, new Integer[]{0, 8, 8, 4}, 8, 8);
+        g.drawImage(head, null, 8, 8);
+
+        return fakeHead;
+    }
+
+    public static BufferedImage genFakeSteve7(BufferedImage avatar){
+
+        BufferedImage fakeHead = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = fakeHead.createGraphics();
+
+        BufferedImage texture = loadImageFromResources("image/fake/7.png");
+        g.drawImage(texture, null, 0,0);
+
+        BufferedImage head = SkinManager.getClipResize(avatar, new Integer[]{4, 0, 8, 8}, 8, 8);
+        g.drawImage(head, null, 8, 8);
+
+        return fakeHead;
+    }
+
+
+    public static void saveImage(BufferedImage image, String name) {
+        try {
+            File outputFile = new File(name+".png");
+            ImageIO.write(image, "png", outputFile);
+        } catch (IOException e) {
+          
+        }
+    }
 
     public static CompletableFuture uploadToMineSkin(BufferedImage baseSkin, MineSkinClient client) throws IOException {
         return ((CompletableFuture)client.generateUpload(baseSkin).thenApply(skin -> skin.getSkin().data().texture().value())).exceptionally(throwable -> {

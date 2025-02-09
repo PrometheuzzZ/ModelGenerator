@@ -37,7 +37,7 @@ public class Main {
             JTextField apiKeyField = new JTextField(20);
 
             JLabel modelLabel = new JLabel("Model:");
-            String[] models = {"Plushe", "Mojang", "Sleep Animation","Cape"};
+            String[] models = {"Plushe", "Mojang", "Sleep Animation", "Fake Steve", "Cape"};
             JComboBox<String> modelComboBox = new JComboBox<>(models);
 
             generateButton = new JButton("Generate");
@@ -134,6 +134,12 @@ public class Main {
                 case "Sleep Animation" -> {
                     boolean sleepAnimationIsValide =  validSleep(data, apiKey);
                     if (!sleepAnimationIsValide) {
+                        enableButton();
+                    }
+                }
+                case "Fake Steve" -> {
+                    boolean fakeSteveIsValide =  validFakeSteve(data, apiKey);
+                    if (!fakeSteveIsValide) {
                         enableButton();
                     }
                 }

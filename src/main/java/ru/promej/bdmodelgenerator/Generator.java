@@ -52,6 +52,10 @@ public class Generator {
         return validSkinTypeModel(data, apiKey, "sleep");
     }
 
+    public static boolean validFakeSteve(String data, String apiKey) {
+        return validSkinTypeModel(data, apiKey, "fakeSteve");
+    }
+
     public static boolean validPlushe(String data, String apiKey) {
         return validSkinTypeModel(data, apiKey, "plushe");
     }
@@ -98,6 +102,8 @@ public class Generator {
         }
     }
 
+
+
     public static void generateSkinTypeModel(BufferedImage baseSkin, String apiKey, String modelType) {
         boolean slim;
         MineSkinClient client = MineSkinClient.builder().requestHandler(JsoupRequestHandler::new).userAgent("BDModelGenerator/v1.0").apiKey(apiKey).build();
@@ -142,6 +148,38 @@ public class Generator {
             if (this.type.contains("sleep")) {
                 this.upSleep();
             }
+
+            if (this.type.contains("fakeSteve")) {
+                this.upFakeSteve();
+            }
+        }
+
+        void upFakeSteve() {
+            GenerateModelThread.uploadFakeSteve(this.baseSkin, this.client).thenAccept(response -> {
+                String placeholderCmd = "/summon block_display ~-0.5 ~-0.5 ~-0.5 {Passengers:[{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;1317659171,1938555806,-1234130410,-1781182048],properties:[{name:\"textures\",value:\"head1\"}]}}},item_display:\"none\",transformation:[-1f,0f,0f,0.484375f,0f,1f,0f,0.5002423905f,0f,0f,-0.125f,0.7167063357f,0f,0f,0f,1f]},{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;40548572,298576305,1296709565,-1200694071],properties:[{name:\"textures\",value:\"head2\"}]}}},item_display:\"none\",transformation:[-1f,0f,0f,0.484375f,0f,0.5f,0f,0.7502423905f,0f,0f,-0.125f,0.7167063357f,0f,0f,0f,1f]},{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;401375468,-1176566726,585489945,771065453],properties:[{name:\"textures\",value:\"head3\"}]}}},item_display:\"none\",transformation:[-1f,0f,0f,0.734375f,0f,1f,0f,1.2502423905f,0f,0f,-0.125f,0.7167063357f,0f,0f,0f,1f]},{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;-733356609,-1653439531,1067163629,-918939689],properties:[{name:\"textures\",value:\"head4\"}]}}},item_display:\"none\",transformation:[-1f,0f,0f,0.234375f,0f,1f,0f,1.2502423905f,0f,0f,-0.125f,0.7167063357f,0f,0f,0f,1f]},{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;-2104595839,1875061583,2014736938,2130477522],properties:[{name:\"textures\",value:\"head5\"}]}}},item_display:\"none\",transformation:[-1f,0f,0f,0.734375f,0f,0.5f,0f,1.5002423905f,0f,0f,-0.125f,0.7167063357f,0f,0f,0f,1f]},{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;1987143816,-1072786049,-1596607699,-1573693307],properties:[{name:\"textures\",value:\"head6\"}]}}},item_display:\"none\",transformation:[-1f,0f,0f,0.234375f,0f,0.5f,0f,1.5002423905f,0f,0f,-0.125f,0.7167063357f,0f,0f,0f,1f]},{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;2063060261,2112136134,-836560750,1720274090],properties:[{name:\"textures\",value:\"head7\"}]}}},item_display:\"none\",transformation:[-1f,0f,0f,0.484375f,0f,1f,0f,2.0002423905f,0f,0f,-0.125f,0.7167063357f,0f,0f,0f,1f]},{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;-894263039,1153281065,-260301316,-1353984713],properties:[{name:\"textures\",value:\"ewogICJ0aW1lc3RhbXAiIDogMTczNjc5MTM3ODkyOSwKICAicHJvZmlsZUlkIiA6ICI1MzE4YWJhNDJiMTk0ODNiODFiMWY2N2Y1ODVjNDdkNSIsCiAgInByb2ZpbGVOYW1lIiA6ICJocHllZiIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS8zYmIwNDk0NzZhZjgzNTkwOWEzYWMwOTc1ZDNhZTUzODcyZDI3OTgyNDg0N2I3NzU3ZTAwMjMwYzJhZWIzMWIyIgogICAgfQogIH0KfQ==\"}]}}},item_display:\"none\",transformation:[0f,-0.5f,0f,0.359375f,-0.8897352711f,1e-10f,0.0570596107f,0.6789923905f,-0.4564768858f,-1e-10f,-0.1112169089f,0.5992063357f,0f,0f,0f,1f]},{id:\"minecraft:item_display\",item:{id:\"minecraft:player_head\",Count:1,components:{\"minecraft:profile\":{id:[I;1382856424,2058426162,801948942,-465648030],properties:[{name:\"textures\",value:\"ewogICJ0aW1lc3RhbXAiIDogMTczNjc5MTM4NDY0OCwKICAicHJvZmlsZUlkIiA6ICIzNDYyZDUwYmZjNGY0NWYxOGM5NTA2MzgwOWY4YzRhZSIsCiAgInByb2ZpbGVOYW1lIiA6ICJORGhwIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzUwOGUzYzIyNjM2ZTE0OTJhOWNiN2E2MDhlNTNiMjRjZmIwNDIzZjhmNzhjMGI0MWQ3MzZkNjhiNzM3MmUwMzIiCiAgICB9CiAgfQp9\"}]}}},item_display:\"none\",transformation:[0f,-0.5f,0f,0.359375f,-0.8897352711f,1e-10f,0.0570596107f,0.2339923905f,-0.4564768858f,-1e-10f,-0.1112169089f,0.3710813357f,0f,0f,0f,1f]}]}";
+                String placeholderModel = "[{\"isCollection\":true,\"name\":\"Project\",\"nbt\":\"\",\"transforms\":[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],\"children\":[{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"head1\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-1,1.2246467991473532e-16,0,0.484375,1.2246467991473532e-16,1,1.5308084989341915e-17,0.5002423905,1.4997597826618576e-32,1.2246467991473532e-16,-0.125,0.7167063357,0,0,0,1],\"defaultTextureValue\":\"head1\"},{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"head2\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-1,6.123233995736766e-17,0,0.484375,1.2246467991473532e-16,0.5,1.5308084989341915e-17,0.7502423905,1.4997597826618576e-32,6.123233995736766e-17,-0.125,0.7167063357,0,0,0,1],\"defaultTextureValue\":\"head2\"},{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"head3\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-1,1.2246467991473532e-16,0,0.734375,1.2246467991473532e-16,1,1.5308084989341915e-17,1.2502423905,1.4997597826618576e-32,1.2246467991473532e-16,-0.125,0.7167063357,0,0,0,1],\"defaultTextureValue\":\"head3\"},{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"head4\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-1,1.2246467991473532e-16,0,0.234375,1.2246467991473532e-16,1,1.5308084989341915e-17,1.2502423905,1.4997597826618576e-32,1.2246467991473532e-16,-0.125,0.7167063357,0,0,0,1],\"defaultTextureValue\":\"head4\"},{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"head5\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-1,6.123233995736766e-17,0,0.734375,1.2246467991473532e-16,0.5,1.5308084989341915e-17,1.5002423905,1.4997597826618576e-32,6.123233995736766e-17,-0.125,0.7167063357,0,0,0,1],\"defaultTextureValue\":\"head5\"},{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"head6\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-1,6.123233995736766e-17,0,0.234375,1.2246467991473532e-16,0.5,1.5308084989341915e-17,1.5002423905,1.4997597826618576e-32,6.123233995736766e-17,-0.125,0.7167063357,0,0,0,1],\"defaultTextureValue\":\"head6\"},{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"head7\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-1,1.2246467991473532e-16,0,0.484375,1.2246467991473532e-16,1,1.5308084989341915e-17,2.0002423905,1.4997597826618576e-32,1.2246467991473532e-16,-0.125,0.7167063357,0,0,0,1],\"defaultTextureValue\":\"head7\"},{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"ewogICJ0aW1lc3RhbXAiIDogMTczNjc5MTM3ODkyOSwKICAicHJvZmlsZUlkIiA6ICI1MzE4YWJhNDJiMTk0ODNiODFiMWY2N2Y1ODVjNDdkNSIsCiAgInByb2ZpbGVOYW1lIiA6ICJocHllZiIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS8zYmIwNDk0NzZhZjgzNTkwOWEzYWMwOTc1ZDNhZTUzODcyZDI3OTgyNDg0N2I3NzU3ZTAwMjMwYzJhZWIzMWIyIgogICAgfQogIH0KfQ==\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-4.8497428295361196e-11,-0.49999999997575134,2.3712750509854166e-11,0.359375,-0.8897352711440017,6.487221870484363e-11,0.05705961071819511,0.6789923905,-0.4564768858079918,-7.33233057568195e-11,-0.11121690887778943,0.5992063357,0,0,0,1],\"defaultTextureValue\":\"ewogICJ0aW1lc3RhbXAiIDogMTczNjc5MTM3ODkyOSwKICAicHJvZmlsZUlkIiA6ICI1MzE4YWJhNDJiMTk0ODNiODFiMWY2N2Y1ODVjNDdkNSIsCiAgInByb2ZpbGVOYW1lIiA6ICJocHllZiIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS8zYmIwNDk0NzZhZjgzNTkwOWEzYWMwOTc1ZDNhZTUzODcyZDI3OTgyNDg0N2I3NzU3ZTAwMjMwYzJhZWIzMWIyIgogICAgfQogIH0KfQ==\"},{\"isItemDisplay\":true,\"name\":\"player_head[display=none]\",\"brightness\":{\"sky\":15,\"block\":0},\"nbt\":\"\",\"tagHead\":{\"Value\":\"ewogICJ0aW1lc3RhbXAiIDogMTczNjc5MTM4NDY0OCwKICAicHJvZmlsZUlkIiA6ICIzNDYyZDUwYmZjNGY0NWYxOGM5NTA2MzgwOWY4YzRhZSIsCiAgInByb2ZpbGVOYW1lIiA6ICJORGhwIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzUwOGUzYzIyNjM2ZTE0OTJhOWNiN2E2MDhlNTNiMjRjZmIwNDIzZjhmNzhjMGI0MWQ3MzZkNjhiNzM3MmUwMzIiCiAgICB9CiAgfQp9\"},\"textureValueList\":[],\"paintTexture\":null,\"transforms\":[-4.8497428295361196e-11,-0.49999999997575134,2.3712750509854166e-11,0.359375,-0.8897352711440017,6.487221870484363e-11,0.05705961071819511,0.2339923905,-0.4564768858079918,-7.33233057568195e-11,-0.11121690887778943,0.3710813357,0,0,0,1],\"defaultTextureValue\":\"ewogICJ0aW1lc3RhbXAiIDogMTczNjc5MTM4NDY0OCwKICAicHJvZmlsZUlkIiA6ICIzNDYyZDUwYmZjNGY0NWYxOGM5NTA2MzgwOWY4YzRhZSIsCiAgInByb2ZpbGVOYW1lIiA6ICJORGhwIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzUwOGUzYzIyNjM2ZTE0OTJhOWNiN2E2MDhlNTNiMjRjZmIwNDIzZjhmNzhjMGI0MWQ3MzZkNjhiNzM3MmUwMzIiCiAgICB9CiAgfQp9\"}]}]";
+                placeholderCmd = placeholderCmd.replaceAll("head1", response.get("head1"));
+                placeholderCmd = placeholderCmd.replaceAll("head2", response.get("head2"));
+                placeholderCmd = placeholderCmd.replaceAll("head3", response.get("head3"));
+                placeholderCmd = placeholderCmd.replaceAll("head4", response.get("head4"));
+                placeholderCmd = placeholderCmd.replaceAll("head5", response.get("head5"));
+                placeholderCmd = placeholderCmd.replaceAll("head6", response.get("head6"));
+                placeholderCmd = placeholderCmd.replaceAll("head7", response.get("head7"));
+                placeholderModel = placeholderModel.replaceAll("head1", response.get("head1"));
+                placeholderModel = placeholderModel.replaceAll("head2", response.get("head2"));
+                placeholderModel = placeholderModel.replaceAll("head3", response.get("head3"));
+                placeholderModel = placeholderModel.replaceAll("head4", response.get("head4"));
+                placeholderModel = placeholderModel.replaceAll("head5", response.get("head5"));
+                placeholderModel = placeholderModel.replaceAll("head6", response.get("head6"));
+                placeholderModel = placeholderModel.replaceAll("head7", response.get("head7"));
+
+                String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
+
+                sendLog("Command: " + placeholderCmd);
+                sendLog("Model: " + placeholderModel);
+
+                showDialog("fakeSteve_cmd_"+timeStamp+".txt", placeholderCmd, "fakeSteve_model_"+timeStamp+".bdengine", placeholderModel);
+            });
         }
 
         void upCape() {
@@ -303,6 +341,52 @@ public class Generator {
                 Thread.sleep(5500L);
                 futureMap.put("plcright_leg2", SkinManager.uploadToMineSkin(SkinManager.getRightLeg2(baseskin), client));
                 sendLog(modelType + " generated: 100%");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            for (String key : futureMap.keySet()) {
+                CompletableFuture completable = futureMap.get(key);
+                completable.thenApply(v -> "");
+            }
+            CompletableFuture<Void> allFutures = CompletableFuture.allOf(futureMap.values().toArray(new CompletableFuture[0]));
+            CompletionStage resultFuture = allFutures.thenApply(v -> {
+                HashMap<String, String> urlMap = new HashMap<String, String>();
+                for (Map.Entry entry : futureMap.entrySet()) {
+                    String url = (String) ((CompletableFuture) entry.getValue()).join();
+                    urlMap.put((String) entry.getKey(), url);
+                }
+                return urlMap;
+            });
+            return (CompletableFuture) resultFuture;
+        }
+
+
+        static CompletableFuture<Map<String, String>> uploadFakeSteve(BufferedImage baseskin, MineSkinClient client) {
+            HashMap<String, CompletableFuture> futureMap = new HashMap<String, CompletableFuture>();
+
+            BufferedImage avatar = SkinManager.createFullBodyAvatar(baseskin);
+
+            try {
+                futureMap.put("head1", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve1(avatar), client));
+                sendLog("Fake Steve generated: 15%");
+                Thread.sleep(5500L);
+                futureMap.put("head2", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve2(avatar), client));
+                sendLog("Fake Steve generated: 28%");
+                Thread.sleep(5500L);
+                futureMap.put("head3", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve3(avatar), client));
+                sendLog("Fake Steve generated: 42%");
+                Thread.sleep(5500L);
+                futureMap.put("head4", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve4(avatar), client));
+                sendLog("Fake Steve generated: 56%");
+                Thread.sleep(5500L);
+                futureMap.put("head5", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve5(avatar), client));
+                sendLog("Fake Steve generated: 70%");
+                Thread.sleep(5500L);
+                futureMap.put("head6", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve6(avatar), client));
+                sendLog("Fake Steve generated: 84%");
+                Thread.sleep(5500L);
+                futureMap.put("head7", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve7(avatar), client));
+                sendLog("Fake Steve generated: 100%");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
