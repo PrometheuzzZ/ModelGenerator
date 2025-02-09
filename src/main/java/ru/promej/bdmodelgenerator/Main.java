@@ -37,7 +37,7 @@ public class Main {
             JTextField apiKeyField = new JTextField(20);
 
             JLabel modelLabel = new JLabel("Model:");
-            String[] models = {"Plushe", "Mojang", "Cape"};
+            String[] models = {"Plushe", "Mojang", "Sleep Animation","Cape"};
             JComboBox<String> modelComboBox = new JComboBox<>(models);
 
             generateButton = new JButton("Generate");
@@ -98,7 +98,7 @@ public class Main {
             frame.setVisible(true);
 
             sendLog("BDModelGenerator started");
-            sendLog("v1.0 by _PrometheuZ_");
+            sendLog("v1.1 by _PrometheuZ_");
         });
     }
 
@@ -127,6 +127,13 @@ public class Main {
                 case "Cape" -> {
                     boolean capeIsValide = validCape(data, apiKey);
                     if (!capeIsValide) {
+                        enableButton();
+                    }
+                }
+
+                case "Sleep Animation" -> {
+                    boolean sleepAnimationIsValide =  validSleep(data, apiKey);
+                    if (!sleepAnimationIsValide) {
                         enableButton();
                     }
                 }
