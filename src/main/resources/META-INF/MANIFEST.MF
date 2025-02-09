@@ -1,3 +1,12 @@
 Manifest-Version: 1.0
 Main-Class: ru.promej.bdmodelgenerator.Main
+Class-Path: junit-jupiter-api-5.10.0.jar logback-classic-1.4.11.jar list
+ enablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar junit-jupite
+ r-params-5.10.0.jar junit-jupiter-engine-5.10.0.jar junit-platform-comm
+ ons-1.10.0.jar opentest4j-1.3.0.jar error_prone_annotations-2.18.0.jar 
+ junit-jupiter-5.10.0.jar jsr305-3.0.2.jar jackson-core-2.14.2.jar gson-
+ 2.10.1.jar jsoup-1.15.3.jar guava-32.1.2-jre.jar failureaccess-1.0.1.ja
+ r annotations-23.0.0.jar logback-core-1.4.11.jar checker-qual-3.33.0.ja
+ r slf4j-api-2.0.9.jar java-client-3.0.1.jar junit-platform-engine-1.10.
+ 0.jar
 

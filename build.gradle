@@ -1,5 +1,13 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ru.promej.bdmodelgenerator.Main'
+    }
 }
 
 group = 'org.example'
