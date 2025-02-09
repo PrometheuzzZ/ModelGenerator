@@ -10,6 +10,12 @@ jar {
     }
 }
 
+shadowJar {
+    archiveBaseName.set("ModelGenerator")
+    archiveVersion.set("1.2")
+    archiveClassifier.set("")
+}
+
 group = 'org.example'
 version = '1.0-SNAPSHOT'
 
