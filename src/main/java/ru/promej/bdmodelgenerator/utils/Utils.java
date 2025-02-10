@@ -18,8 +18,7 @@ import java.util.Base64;
 import java.util.zip.GZIPOutputStream;
 import javax.imageio.ImageIO;
 
-import static ru.promej.bdmodelgenerator.Main.enableButton;
-import static ru.promej.bdmodelgenerator.Main.sendLog;
+import static ru.promej.bdmodelgenerator.Main.*;
 
 public class Utils {
 
@@ -103,6 +102,7 @@ public class Utils {
             connection.setRequestProperty("User-Agent", "BDModelGenerator/v1.0");
             connection.setRequestProperty("Authorization", "Bearer " + key);
             if (connection.getResponseCode() == 200) {
+                saveApiKey(key);
                 return true;
             }
             if (connection.getResponseCode() == 403) {

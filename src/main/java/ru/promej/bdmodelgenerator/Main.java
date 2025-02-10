@@ -1,5 +1,7 @@
 package ru.promej.bdmodelgenerator;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import ru.promej.bdmodelgenerator.utils.Utils;
 
 import javax.swing.*;
@@ -8,6 +10,7 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,23 +21,30 @@ public class Main {
 
     private static JTextArea logTextArea;
     private static JButton generateButton;
+    private static JTextField apiKeyField;
+    private static String apiKeyMineSkin = "";
+    private static final String API_KEY_FILE = "apiKey.txt";
+    private static boolean savedApiKey = false;
 
     public static void main(String[] args) {
 
         setDarkTheme();
 
+
+
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("BDModelGenerator v1.2");
+            JFrame frame = new JFrame("BDModelGenerator v1.3");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(900, 280);
             frame.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
 
-            JLabel nicknameLabel = new JLabel("Nickname/Url:");
+            JLabel nicknameLabel = new JLabel("Nickname/Skin URL:");
             JTextField nicknameField = new JTextField(20);
 
-            JLabel apiKeyLabel = new JLabel("MineSkin ApiKey:");
-            JTextField apiKeyField = new JTextField(20);
+            JLabel apiKeyLabel = new JLabel("MineSkin API Key:");
+            apiKeyField = new JTextField(20);
+
 
             JLabel modelLabel = new JLabel("Model:");
             String[] models = {"Plushe", "Mojang", "Sleep Animation", "Fake Steve", "Cape"};
@@ -98,8 +108,17 @@ public class Main {
             frame.setVisible(true);
 
             sendLog("BDModelGenerator started");
-            sendLog("v1.2 by _PrometheuZ_");
+            sendLog("v1.3 by _PrometheuZ_");
+            checkAndLoadApiKey();
+
+            if(isSavedApiKey()){
+                apiKeyField.setText(apiKeyMineSkin);
+            }
+
+
         });
+
+
     }
 
     private static void generate(String data, String apiKey, String selectedModel) {
@@ -209,31 +228,45 @@ public class Main {
 
     private static void setDarkTheme() {
         try {
-            UIManager.setLookAndFeel(new NimbusLookAndFeel());
-            UIManager.put("control", new Color(50, 50, 50));
-            UIManager.put("info", new Color(50, 50, 50));
-            UIManager.put("menu", new Color(60, 60, 60));
-            UIManager.put("text", Color.white);
-            UIManager.put("textField", new Color(80, 80, 80));
-            UIManager.put("nimbusBase", new Color(30, 30, 30));
-            UIManager.put("nimbusBlueGrey", new Color(70, 70, 70));
-            UIManager.put("nimbusLightBackground", new Color(50, 50, 50));
-            UIManager.put("nimbusFocus", new Color(100, 100, 100));
-            UIManager.put("menuText", Color.white);
-            UIManager.put("Button.background", new Color(65, 65, 65));
-            UIManager.put("Button.foreground", Color.white);
-            UIManager.put("Button.border", BorderFactory.createEmptyBorder());
-            UIManager.put("TabbedPane.selectedBackground", new Color(70, 70, 70));
-            UIManager.put("TabbedPane.selectedForeground", Color.white);
-            UIManager.put("Button.arc", 0);
-            UIManager.put("TextField.border", BorderFactory.createEtchedBorder(1));
-            UIManager.put("TextField.background", new Color(80, 80, 80));
-            UIManager.put("TextField.foreground", Color.WHITE);
-
+            UIManager.setLookAndFeel(new FlatMacDarkLaf());
         } catch (UnsupportedLookAndFeelException exc) {
-            System.err.println("Nimbus: Unsupported Look and feel!");
+            System.err.println("Flatlaf: Unsupported FlatMacDarkLaf!");
         }
     }
 
+
+    public static void checkAndLoadApiKey() {
+        File file = new File(API_KEY_FILE);
+        if (file.exists() && file.isFile()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String apiKey = reader.readLine();
+                if (apiKey != null) {
+                    savedApiKey = true; // Устанавливаем значение, если ключ загружен
+                    apiKeyMineSkin = apiKey;
+                    sendLog("API Key loaded!");
+                }
+            } catch (IOException ignored) {
+
+            }
+        } else {
+
+        }
+    }
+
+    public static void saveApiKey(String apiKey) {
+        if(!savedApiKey) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(API_KEY_FILE))) {
+                writer.write(apiKey);
+                savedApiKey = true;
+                System.out.println("API Key saved!");
+            } catch (IOException e) {
+
+            }
+        }
+    }
+
+    public static boolean isSavedApiKey() {
+        return savedApiKey;
+    }
 
 }
