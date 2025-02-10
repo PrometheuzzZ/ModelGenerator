@@ -127,10 +127,10 @@ public class Utils {
             Files.write(cmdFilePath, cmdData.getBytes());
             Files.write(bdFilePath, bdData.getBytes());
             sendLog("Files saved successfully:");
-            sendLog(" - " + cmdFilePath.toString());
-            sendLog(" - " + bdFilePath.toString());
+            sendLogGreen(" - " + cmdFilePath.toString());
+            sendLogGreen(" - " + bdFilePath.toString());
         } catch (IOException e) {
-            sendLog("Error saving files: " + e.getMessage());
+            sendLogRed("Error saving files: " + e.getMessage());
         }
 
 

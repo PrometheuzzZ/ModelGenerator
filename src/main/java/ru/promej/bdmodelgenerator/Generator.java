@@ -24,19 +24,19 @@ public class Generator {
             if (Utils.isPngUrl(data)) {
                 BufferedImage baseSkin = Utils.getSkin(data);
                 if (Utils.validCapeSize(baseSkin)) {
-                    sendLog("The cape model is being generated, please wait!");
+                    sendLogBlue("The cape model is being generated, please wait!");
                     generateCape(baseSkin, apiKey);
                     return true;
                 } else {
-                    sendLog("Texture size should be 64x32");
+                    sendLogRed("Texture size should be 64x32");
                     return false;
                 }
             } else {
-                sendLog("This link does not the image!");
+                sendLogRed("This link does not the image!");
                 return false;
             }
         } else {
-            sendLog("Only png links are allowed!");
+            sendLogRed("Only png links are allowed!");
             return false;
         }
 
@@ -71,16 +71,17 @@ public class Generator {
                 BufferedImage baseSkin = Utils.getSkin(data);
                 if (Utils.validSkinSize(baseSkin)) {
                     generateSkinTypeModel(baseSkin, apiKey, modelType);
-                    sendLog("The "+modelType+" model is being generated, please wait!");
+                    sendLogBlue("The "+modelType+" model is being generated, please wait!");
                     return true;
                 } else {
                     baseSkin = SkinManager.fixLegacy(baseSkin);
                     generateSkinTypeModel(baseSkin, apiKey, modelType);
-                    sendLog("The skin probably has a legacy format, the result may be distorted, use the new skin format (64x64). \nThe plush model is being generated, please wait!");
+                    sendLogOrange("The skin probably has a legacy format, the result may be distorted, use the new skin format (64x64).");
+                    sendLogBlue("The "+modelType+" model is being generated, please wait!");
                     return true;
                 }
             } else {
-                sendLog("This link does not the image!");
+                sendLogRed("This link does not the image!");
                 return false;
             }
         } else if (MojangAPI.validateName(data)) {
@@ -88,16 +89,17 @@ public class Generator {
             BufferedImage baseSkin = Utils.getSkin(textureUrl.replaceAll("http", "https"));
             if (Utils.validSkinSize(baseSkin)) {
                 generateSkinTypeModel(baseSkin, apiKey, modelType);
-                sendLog("The "+modelType+" model is being generated, please wait!");
+                sendLogGreen("The "+modelType+" model is being generated, please wait!");
                 return true;
             } else {
                 baseSkin = SkinManager.fixLegacy(baseSkin);
                 generateSkinTypeModel(baseSkin, apiKey, modelType);
-                sendLog("The skin probably has a legacy format, the result may be distorted, use the new skin format (64x64).\nThe model is being generated, please wait!");
+                sendLogOrange("The skin probably has a legacy format, the result may be distorted, use the new skin format (64x64).");
+                sendLogBlue("The "+modelType+" model is being generated, please wait!");
                 return true;
             }
         } else {
-            sendLog("Please provide a valid premium nickname!");
+            sendLogRed("Please provide a valid premium nickname!");
             return false;
         }
     }
@@ -175,8 +177,6 @@ public class Generator {
 
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
 
-                sendLog("Command: " + placeholderCmd);
-                sendLog("Model: " + placeholderModel);
 
                 showDialog("fakeSteve_cmd_"+timeStamp+".txt", placeholderCmd, "fakeSteve_model_"+timeStamp+".bdengine", placeholderModel);
             });
@@ -196,9 +196,6 @@ public class Generator {
                 placeholderModel = placeholderModel.replaceAll("cape4", response.get("cape4"));
 
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
-
-                sendLog("Command: " + placeholderCmd);
-                sendLog("Model: " + placeholderModel);
 
                 showDialog("cape_cmd_"+timeStamp+".txt", placeholderCmd, "cape_model_"+timeStamp+".bdengine", placeholderModel);
             });
@@ -233,8 +230,6 @@ public class Generator {
 
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
 
-                sendLog("Command: " + placeholderCmd);
-                sendLog("Model: " + placeholderModel);
 
                 showDialog("sleep_cmd_"+timeStamp+".txt", placeholderCmd, "sleep_model_"+timeStamp+".bdengine", placeholderModel);
             });
@@ -268,9 +263,6 @@ public class Generator {
                 placeholderModel = placeholderModel.replaceAll("plcright_leg2", response.get("plcright_leg2"));
 
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
-
-                sendLog("Command: " + placeholderCmd);
-                sendLog("Model: " + placeholderModel);
 
                 showDialog("plushe_cmd_"+timeStamp+".txt", placeholderCmd, "plushe_model_"+timeStamp+".bdengine", placeholderModel);
             });
@@ -306,8 +298,7 @@ public class Generator {
 
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
 
-                sendLog("Command: " + placeholderCmd);
-                sendLog("Model: " + placeholderModel);
+
                 showDialog("mojang_cmd_"+timeStamp+".txt", placeholderCmd, "mojang_model_"+timeStamp+".bdengine", placeholderModel);
             });
         }
@@ -316,31 +307,37 @@ public class Generator {
             HashMap<String, CompletableFuture> futureMap = new HashMap<String, CompletableFuture>();
             try {
                 futureMap.put("plchead", SkinManager.uploadToMineSkin(baseskin, client));
-                sendLog(modelType + " generated: 9%");
+                sendLogBlue(modelType + " generated: 9%");
                 Thread.sleep(5500L);
                 futureMap.put("plcbody1", SkinManager.uploadToMineSkin(SkinManager.getBody1(baseskin), client));
+                sendLogBlue(modelType + " generated: 18%");
                 Thread.sleep(5500L);
                 futureMap.put("plcbody2", SkinManager.uploadToMineSkin(SkinManager.getBody2(baseskin), client));
+                sendLogBlue(modelType + " generated: 27%");
                 Thread.sleep(5500L);
                 futureMap.put("plcleft_arm1", SkinManager.uploadToMineSkin(SkinManager.getNewLeftArm1(baseskin), client));
-                sendLog(modelType + " generated: 36%");
+                sendLogBlue(modelType + " generated: 36%");
                 Thread.sleep(5500L);
                 futureMap.put("plcleft_arm2", SkinManager.uploadToMineSkin(SkinManager.getNewLeftArm2(baseskin), client));
+                sendLogBlue(modelType + " generated: 45%");
                 Thread.sleep(5500L);
                 futureMap.put("plcright_arm1", SkinManager.uploadToMineSkin(SkinManager.getNewRightArm1(baseskin), client));
+                sendLogBlue(modelType + " generated: 54%");
                 Thread.sleep(5500L);
                 futureMap.put("plcright_arm2", SkinManager.uploadToMineSkin(SkinManager.getNewRightArm2(baseskin), client));
-                sendLog(modelType + " generated: 63%");
+                sendLogBlue(modelType + " generated: 63%");
                 Thread.sleep(5500L);
                 futureMap.put("plcleft_leg1", SkinManager.uploadToMineSkin(SkinManager.getLeftLeg1(baseskin), client));
+                sendLogBlue(modelType + " generated: 72%");
                 Thread.sleep(5500L);
                 futureMap.put("plcleft_leg2", SkinManager.uploadToMineSkin(SkinManager.getLeftLeg2(baseskin), client));
+                sendLogBlue(modelType + " generated: 81%");
                 Thread.sleep(5500L);
                 futureMap.put("plcright_leg1", SkinManager.uploadToMineSkin(SkinManager.getRightLeg1(baseskin), client));
-                sendLog(modelType + " generated: 90%");
+                sendLogBlue(modelType + " generated: 90%");
                 Thread.sleep(5500L);
                 futureMap.put("plcright_leg2", SkinManager.uploadToMineSkin(SkinManager.getRightLeg2(baseskin), client));
-                sendLog(modelType + " generated: 100%");
+                sendLogBlue(modelType + " generated: 100%");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -368,25 +365,25 @@ public class Generator {
 
             try {
                 futureMap.put("head1", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve1(avatar), client));
-                sendLog("Fake Steve generated: 15%");
+                sendLogBlue("Fake Steve generated: 15%");
                 Thread.sleep(5500L);
                 futureMap.put("head2", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve2(avatar), client));
-                sendLog("Fake Steve generated: 28%");
+                sendLogBlue("Fake Steve generated: 28%");
                 Thread.sleep(5500L);
                 futureMap.put("head3", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve3(avatar), client));
-                sendLog("Fake Steve generated: 42%");
+                sendLogBlue("Fake Steve generated: 42%");
                 Thread.sleep(5500L);
                 futureMap.put("head4", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve4(avatar), client));
-                sendLog("Fake Steve generated: 56%");
+                sendLogBlue("Fake Steve generated: 56%");
                 Thread.sleep(5500L);
                 futureMap.put("head5", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve5(avatar), client));
-                sendLog("Fake Steve generated: 70%");
+                sendLogBlue("Fake Steve generated: 70%");
                 Thread.sleep(5500L);
                 futureMap.put("head6", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve6(avatar), client));
-                sendLog("Fake Steve generated: 84%");
+                sendLogBlue("Fake Steve generated: 84%");
                 Thread.sleep(5500L);
                 futureMap.put("head7", SkinManager.uploadToMineSkin(SkinManager.genFakeSteve7(avatar), client));
-                sendLog("Fake Steve generated: 100%");
+                sendLogBlue("Fake Steve generated: 100%");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -410,16 +407,16 @@ public class Generator {
             HashMap<String, CompletableFuture> futureMap = new HashMap<String, CompletableFuture>();
             try {
                 futureMap.put("cape1", SkinManager.uploadToMineSkin(SkinManager.getCape1(baseskin), client));
-                sendLog("Cape generated: 25%");
+                sendLogBlue("Cape generated: 25%");
                 Thread.sleep(2500L);
                 futureMap.put("cape2", SkinManager.uploadToMineSkin(SkinManager.getCape2(baseskin), client));
-                sendLog("Cape generated: 50%");
+                sendLogBlue("Cape generated: 50%");
                 Thread.sleep(2500L);
                 futureMap.put("cape3", SkinManager.uploadToMineSkin(SkinManager.getCape3(baseskin), client));
-                sendLog("Cape generated: 75%");
+                sendLogBlue("Cape generated: 75%");
                 Thread.sleep(2500L);
                 futureMap.put("cape4", SkinManager.uploadToMineSkin(SkinManager.getCape4(baseskin), client));
-                sendLog("Cape generated: 100%");
+                sendLogBlue("Cape generated: 100%");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

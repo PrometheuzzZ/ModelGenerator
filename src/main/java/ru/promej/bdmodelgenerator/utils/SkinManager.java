@@ -197,7 +197,6 @@ public class SkinManager {
         return fakeHead;
     }
 
-
     public static void saveImage(BufferedImage image, String name) {
         try {
             File outputFile = new File(name+".png");

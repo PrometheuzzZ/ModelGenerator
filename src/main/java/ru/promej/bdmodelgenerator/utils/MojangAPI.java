@@ -10,11 +10,15 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
+import static ru.promej.bdmodelgenerator.Main.sendLog;
+import static ru.promej.bdmodelgenerator.Main.sendLogPurple;
+
 
 public class MojangAPI {
 
 
     public static String getSkinByName(String name) {
+        sendLogPurple("Get UUID: "+name);
         String uuid = MojangAPI.getUUIDbyName(name);
         String profileJson = MojangAPI.getProfileByUUID(uuid);
 
@@ -35,6 +39,8 @@ public class MojangAPI {
                 TextureProfile textureProfile;
                 try {
                     textureProfile = gson.fromJson(decodedString, TextureProfile.class);
+
+                    sendLogPurple("Skin texture: "+textureProfile.getTextures().getSkin().getUrl());
                     return textureProfile.getTextures().getSkin().getUrl();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -64,6 +70,7 @@ public class MojangAPI {
             Gson gson = new Gson();
             MojangProfile profile = gson.fromJson(response.body(), MojangProfile.class);
 
+            sendLogPurple("Profile UUID: "+profile.id);
             return profile.getId();
         } catch (Exception e) {
             return "incorrect";
