@@ -178,7 +178,7 @@ public class Generator {
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
 
 
-                showDialog("fakeSteve_cmd_"+timeStamp+".txt", placeholderCmd, "fakeSteve_model_"+timeStamp+".bdengine", placeholderModel);
+                endGeneration("fakeSteve_cmd_"+timeStamp+".txt", placeholderCmd, "fakeSteve_model_"+timeStamp+".bdengine", placeholderModel);
             });
         }
 
@@ -197,7 +197,7 @@ public class Generator {
 
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
 
-                showDialog("cape_cmd_"+timeStamp+".txt", placeholderCmd, "cape_model_"+timeStamp+".bdengine", placeholderModel);
+                endGeneration("cape_cmd_"+timeStamp+".txt", placeholderCmd, "cape_model_"+timeStamp+".bdengine", placeholderModel);
             });
         }
 
@@ -231,7 +231,7 @@ public class Generator {
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
 
 
-                showDialog("sleep_cmd_"+timeStamp+".txt", placeholderCmd, "sleep_model_"+timeStamp+".bdengine", placeholderModel);
+                endGeneration("sleep_cmd_"+timeStamp+".txt", placeholderCmd, "sleep_model_"+timeStamp+".bdengine", placeholderModel);
             });
         }
 
@@ -264,7 +264,7 @@ public class Generator {
 
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
 
-                showDialog("plushe_cmd_"+timeStamp+".txt", placeholderCmd, "plushe_model_"+timeStamp+".bdengine", placeholderModel);
+                endGeneration("plushe_cmd_"+timeStamp+".txt", placeholderCmd, "plushe_model_"+timeStamp+".bdengine", placeholderModel);
             });
         }
 
@@ -299,7 +299,7 @@ public class Generator {
                 String timeStamp = new SimpleDateFormat("HH-mm-ss").format(new Date());
 
 
-                showDialog("mojang_cmd_"+timeStamp+".txt", placeholderCmd, "mojang_model_"+timeStamp+".bdengine", placeholderModel);
+                endGeneration("mojang_cmd_"+timeStamp+".txt", placeholderCmd, "mojang_model_"+timeStamp+".bdengine", placeholderModel);
             });
         }
 

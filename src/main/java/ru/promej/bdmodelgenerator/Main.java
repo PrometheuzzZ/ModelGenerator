@@ -1,13 +1,9 @@
 package ru.promej.bdmodelgenerator;
 
-import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import ru.promej.bdmodelgenerator.utils.Utils;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -245,7 +241,7 @@ public class Main {
         }
     }
 
-    public static void showDialog(String cmdName, String cmdData, String bdName, String bdData) {
+    public static void endGeneration(String cmdName, String cmdData, String bdName, String bdData) {
 
         sendLog("Command:");
         sendLogGreen(cmdData);
@@ -255,6 +251,8 @@ public class Main {
         setNewModelFieldText(bdData);
         saveFiles(cmdName, cmdData, bdName, Utils.compressToGZIP(bdData));
         enableButton();
+        sendLog("Visit my page on block-display: https://block-display.com/author/prometheuz/");
+        sendLog("Source: https://github.com/PrometheuzzZ/ModelGenerator");
 
        /* JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
