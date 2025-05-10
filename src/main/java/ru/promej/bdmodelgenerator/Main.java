@@ -3,6 +3,14 @@ package ru.promej.bdmodelgenerator;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import ru.promej.bdmodelgenerator.utils.Utils;
 
+
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -33,6 +41,9 @@ public class Main {
 
 
     public static void main(String[] args) {
+
+
+
         setDarkTheme();
 
         SwingUtilities.invokeLater(() -> {
@@ -168,10 +179,42 @@ public class Main {
 
             // Превью по умолчанию
             updatePreviewImage(previewLabel, (String) modelComboBox.getSelectedItem());
+
+
+            openHtmlWindow();
         });
     }
 
+    private static void openHtmlWindow() {
+        JFrame frame = new JFrame("HTML + JS Окно");
+        JFXPanel jfxPanel = new JFXPanel(); // Инициализирует JavaFX среду
 
+        frame.add(jfxPanel);
+        frame.setSize(800, 600);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+
+        Platform.runLater(() -> {
+            WebView webView = new WebView();
+            WebEngine engine = webView.getEngine();
+
+            // Загружаем внешний сайт
+            engine.setUserAgent("Mozilla/5.0 (Windows; Windows NT 6.2; x64) AppleWebKit/533.12 (KHTML, like Gecko) Chrome/49.0.2538.379 Safari/603.7 Edge/15.95236");
+
+            // Устанавливаем обработчик, который выполнит JS после полной загрузки страницы
+            engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
+                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
+                    // Выполняем JS-код после загрузки
+                    engine.executeScript("alert('JavaScript выполнен из Java');");
+
+                    // Пример: изменить текст на странице
+                    engine.executeScript("document.body.style.background = 'lightyellow';");
+                }
+            });
+
+            jfxPanel.setScene(new Scene(webView));
+        });
+    }
 
     private static void updatePreviewImage(JLabel label, String model) {
         String path = switch (model) {
@@ -276,6 +319,20 @@ public class Main {
                 sendLogRed("Invalid MineSkin ApiKey!");
                 enableButton();
             }
+        } else {
+            sendLogRed("Please provide a nickname or a link to the texture!");
+            enableButton();
+        }
+    }
+
+    private static void testGen(String data, String selectedModel) {
+
+        if (!data.isEmpty()) {
+
+
+
+
+
         } else {
             sendLogRed("Please provide a nickname or a link to the texture!");
             enableButton();
