@@ -34,7 +34,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.14.2'
     implementation 'org.slf4j:slf4j-api:2.0.9'
-    implementation 'ch.qos.logback:logback-classic:1.4.11'
     implementation 'org.jetbrains:annotations:23.0.0'
     implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'org.mineskin:java-client:3.0.1'

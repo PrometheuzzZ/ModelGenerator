@@ -22,7 +22,7 @@ public class SkinManager {
 
         BufferedImage fullBody = createFullBodyAvatar(skin);
 
-        saveImage(genFakeSteve7(fullBody), "avatar");
+        saveImage(fullBody, "avatar");
     }
 
     public static BufferedImage createFullBodyAvatar(BufferedImage skin) {

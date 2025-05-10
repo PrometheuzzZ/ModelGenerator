@@ -9,6 +9,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.ItemEvent;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,56 +29,77 @@ public class Main {
     private static String apiKeyMineSkin = "";
     private static final String API_KEY_FILE = "apiKey.txt";
     private static boolean savedApiKey = false;
+    private static final String VERSION = "1.6";
+
 
     public static void main(String[] args) {
-
         setDarkTheme();
 
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("BDModelGenerator v1.4");
+            JFrame frame = new JFrame("BDModelGenerator v"+VERSION);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(900, 480);
+            frame.setSize(800, 520);
             frame.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
 
             JLabel nicknameLabel = new JLabel("Nickname/Skin URL:");
-            JTextField nicknameField = new JTextField(20);
+            JTextField nicknameField = new JTextField();
+            nicknameField.setPreferredSize(new Dimension(300, 30));
 
             JLabel apiKeyLabel = new JLabel("MineSkin API Key:");
-            apiKeyField = new JTextField(20);
+            apiKeyField = new JTextField();
+            apiKeyField.setPreferredSize(new Dimension(300, 30));
 
             JLabel modelLabel = new JLabel("Model:");
-            String[] models = {"Plushe", "Mojang", "Sleep Animation", "Fake Steve", "Cape"};
+            String[] models = {
+                    "Plushe // Sit", "Plushe // Stand", "Mini // Sit", "Mini // Stand",
+                    "Mojang", "Sleep Animation", "Fake Steve", "Cape"
+            };
             JComboBox<String> modelComboBox = new JComboBox<>(models);
+            modelComboBox.setPreferredSize(new Dimension(300, 30));
 
             JLabel commandLabel = new JLabel("Command:");
-            commandField = new JTextField(20);
-            JButton commandCopyButton = new JButton("Copy");
+            commandField = new JTextField();
+            commandField.setPreferredSize(new Dimension(300, 30));
             commandField.setEnabled(false);
+            JButton commandCopyButton = new JButton("Copy");
+            commandCopyButton.setPreferredSize(new Dimension(300, 30));
 
             JLabel newModelLabel = new JLabel("Model:");
-            newModelField = new JTextField(20);
-            JButton modelCopyButton = new JButton("Copy");
+            newModelField = new JTextField();
+            newModelField.setPreferredSize(new Dimension(300, 30));
             newModelField.setEnabled(false);
+            JButton modelCopyButton = new JButton("Copy");
+            modelCopyButton.setPreferredSize(new Dimension(300, 30));
+
+            generateButton = new JButton("Generate");
+            generateButton.setPreferredSize(new Dimension(300, 40));
+            generateButton.setBackground(new Color(74, 136, 220));
+            generateButton.setForeground(Color.WHITE);
+
+            JLabel previewLabel = new JLabel();
+            previewLabel.setSize(125, 125);
+            previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+            modelComboBox.addItemListener(e -> {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    updatePreviewImage(previewLabel, (String) e.getItem());
+                }
+            });
 
             commandCopyButton.addActionListener(e -> {
                 String commandText = commandField.getText();
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(commandText), null);
-
-                if (!commandField.getText().isEmpty()) {
+                if (!commandText.isEmpty()) {
                     copyToClipboard(commandText);
                     sendLog("Command copied to clipboard!");
                 } else {
                     sendLog("Command is empty!");
                 }
-
             });
 
             modelCopyButton.addActionListener(e -> {
                 String newModelText = newModelField.getText();
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(newModelText), null);
-
-                if (!newModelField.getText().isEmpty()) {
+                if (!newModelText.isEmpty()) {
                     copyToClipboard(newModelText);
                     sendLog("Model copied to clipboard!");
                 } else {
@@ -85,7 +107,6 @@ public class Main {
                 }
             });
 
-            generateButton = new JButton("Generate");
             generateButton.addActionListener(e -> {
                 String nickname = nicknameField.getText();
                 String apiKey = apiKeyField.getText();
@@ -93,95 +114,91 @@ public class Main {
                 generateButton.setEnabled(false);
                 generate(nickname, apiKey, selectedModel);
             });
-            generateButton.setBackground(new Color(74, 136, 220));
-            generateButton.setForeground(Color.WHITE);
 
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.insets = new Insets(5, 5, 5, 5);
 
-            gbc.gridx = 0;
-            gbc.gridy = 0;
-            frame.add(nicknameLabel, gbc);
+            gbc.gridx = 0; gbc.gridy = 0; frame.add(nicknameLabel, gbc);
+            gbc.gridy = 1; frame.add(nicknameField, gbc);
+            gbc.gridy = 2; frame.add(apiKeyLabel, gbc);
+            gbc.gridy = 3; frame.add(apiKeyField, gbc);
+            gbc.gridy = 4; frame.add(modelLabel, gbc);
+            gbc.gridy = 5; frame.add(modelComboBox, gbc);
+            gbc.gridy = 6; frame.add(commandLabel, gbc);
+            gbc.gridy = 7; frame.add(commandField, gbc);
+            gbc.gridy = 8; frame.add(commandCopyButton, gbc);
+            gbc.gridy = 9; frame.add(newModelLabel, gbc);
+            gbc.gridy = 10; frame.add(newModelField, gbc);
+            gbc.gridy = 11; frame.add(modelCopyButton, gbc);
+            gbc.gridy = 12; frame.add(generateButton, gbc);
 
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-            frame.add(nicknameField, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 2;
-            frame.add(apiKeyLabel, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 3;
-            frame.add(apiKeyField, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 4;
-            frame.add(modelLabel, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 5;
-            frame.add(modelComboBox, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 6;
-            frame.add(commandLabel, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 7;
-            frame.add(commandField, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 8;
-            frame.add(commandCopyButton, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 9;
-            frame.add(newModelLabel, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 10;
-            frame.add(newModelField, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 11;
-            frame.add(modelCopyButton, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 12;
-            frame.add(generateButton, gbc);
-
-
+            // === Правый блок с наложением превью ===
             logTextArea = new JTextPane();
             logTextArea.setEditable(false);
-            //logTextArea.setLineWrap(true);
-            //logTextArea.setWrapStyleWord(true);
             JScrollPane scrollPane = new JScrollPane(logTextArea);
-            scrollPane.setPreferredSize(new Dimension(250, 400));
+            scrollPane.setBounds(0, 0, 450, 460); // Размер панели логов
+
+            previewLabel.setBounds(285, 295, 150, 150);
+
+            JLayeredPane layeredPane = new JLayeredPane();
+            layeredPane.setPreferredSize(new Dimension(450, 460));
+            layeredPane.add(scrollPane, Integer.valueOf(1));
+            layeredPane.add(previewLabel, Integer.valueOf(2));
 
             gbc.gridx = 2;
             gbc.gridy = 0;
             gbc.gridheight = 14;
-            gbc.weightx = 1.0;
             gbc.fill = GridBagConstraints.BOTH;
-            frame.add(scrollPane, gbc);
+            frame.add(layeredPane, gbc);
 
+            // === Иконка ===
             ImageIcon icon = new ImageIcon(Main.class.getResource("/image/icon.png"));
             frame.setIconImage(icon.getImage());
 
             frame.setVisible(true);
-
             nicknameField.requestFocusInWindow();
 
             sendLogPurple("BDModelGenerator started");
-            sendLogPurple("v1.4 by _PrometheuZ_");
+            sendLogPurple("v"+VERSION+" by _PrometheuZ_");
             checkAndLoadApiKey();
 
             if (isSavedApiKey()) {
                 apiKeyField.setText(apiKeyMineSkin);
             }
+
+            // Превью по умолчанию
+            updatePreviewImage(previewLabel, (String) modelComboBox.getSelectedItem());
         });
+    }
+
+
+
+    private static void updatePreviewImage(JLabel label, String model) {
+        String path = switch (model) {
+            case "Plushe // Sit" -> "/image/previews/plushe_sit.png";
+            case "Plushe // Stand" -> "/image/previews/plushe_stand.png";
+            case "Mini // Sit" -> "/image/previews/mini_sit.png";
+            case "Mini // Stand" -> "/image/previews/mini_stand.png";
+            case "Mojang" -> "/image/previews/mojang.png";
+            case "Sleep Animation" -> "/image/previews/sleep.png";
+            case "Fake Steve" -> "/image/previews/fakesteve.png";
+            case "Cape" -> "/image/previews/cape.png";
+            default -> null;
+        };
+
+        if (path != null) {
+            java.net.URL imageUrl = Main.class.getResource(path);
+            if (imageUrl != null) {
+                ImageIcon icon = new ImageIcon(imageUrl);
+                Image img = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                label.setIcon(new ImageIcon(img));
+            } else {
+                label.setIcon(null);
+                sendLog("Image not found: " + path);
+            }
+        } else {
+            label.setIcon(null);
+        }
     }
 
     private static void generate(String data, String apiKey, String selectedModel) {
@@ -197,12 +214,36 @@ public class Main {
                 sendLogGreen("MineSkin ApiKey is Valid.");
 
                 switch (selectedModel) {
-                    case "Plushe" -> {
-                        boolean plusheIsValide = validPlushe(data, apiKey);
+
+                    case "Mini // Sit" -> {
+                        boolean plusheIsValide = validMiniSit(data, apiKey);
                         if (!plusheIsValide) {
                             enableButton();
                         }
                     }
+
+                    case "Mini // Stand" -> {
+                        boolean plusheIsValide = validMiniStand(data, apiKey);
+                        if (!plusheIsValide) {
+                            enableButton();
+                        }
+                    }
+
+
+                    case "Plushe // Sit" -> {
+                        boolean plusheIsValide = validPlusheSit(data, apiKey);
+                        if (!plusheIsValide) {
+                            enableButton();
+                        }
+                    }
+
+                    case "Plushe // Stand" -> {
+                        boolean plusheIsValide = validPlusheStand(data, apiKey);
+                        if (!plusheIsValide) {
+                            enableButton();
+                        }
+                    }
+
                     case "Mojang" -> {
                         boolean mojangIsValide = validMojang(data, apiKey);
                         if (!mojangIsValide) {
@@ -251,8 +292,23 @@ public class Main {
         setNewModelFieldText(bdData);
         saveFiles(cmdName, cmdData, bdName, Utils.compressToGZIP(bdData));
         enableButton();
-        sendLog("Visit my page on block-display: https://block-display.com/author/prometheuz/");
+        sendLog("Telegram: https://t.me/promej");
         sendLog("Source: https://github.com/PrometheuzzZ/ModelGenerator");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
+        sendLog("");
 
        /* JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
