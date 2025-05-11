@@ -13,7 +13,7 @@ jar {
 
 shadowJar {
     archiveBaseName.set("ModelGenerator")
-    archiveVersion.set("1.6")
+    archiveVersion.set("1.7")
     archiveClassifier.set("")
 }
 
@@ -40,9 +40,6 @@ dependencies {
     implementation 'org.mineskin:java-client:3.0.1'
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.formdev:flatlaf:3.5.4'
-    implementation 'org.openjfx:javafx-controls:21'
-    implementation 'org.openjfx:javafx-web:21'
-    implementation 'org.openjfx:javafx-swing:21'
 }
 
 test {

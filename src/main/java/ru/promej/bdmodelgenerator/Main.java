@@ -19,8 +19,12 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ItemEvent;
 import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
+import java.util.zip.GZIPOutputStream;
 
 import static ru.promej.bdmodelgenerator.Generator.*;
 import static ru.promej.bdmodelgenerator.utils.Utils.saveFiles;
@@ -32,24 +36,24 @@ public class Main {
     private static JTextField apiKeyField;
     private static JTextField newModelField;
     private static JTextField commandField;
+    private static JLabel previewLabel;
 
 
     private static String apiKeyMineSkin = "";
     private static final String API_KEY_FILE = "apiKey.txt";
     private static boolean savedApiKey = false;
-    private static final String VERSION = "1.6";
+    private static final String VERSION = "1.7";
 
+    public static JCheckBox saveModelsCheckbox;
 
     public static void main(String[] args) {
-
-
 
         setDarkTheme();
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("BDModelGenerator v"+VERSION);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 520);
+            frame.setSize(800, 545);
             frame.setLayout(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
 
@@ -88,15 +92,17 @@ public class Main {
             generateButton.setBackground(new Color(74, 136, 220));
             generateButton.setForeground(Color.WHITE);
 
-            JLabel previewLabel = new JLabel();
+            previewLabel = new JLabel();
             previewLabel.setSize(125, 125);
             previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
             modelComboBox.addItemListener(e -> {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
+                    previewLabel.setVisible(true);
                     updatePreviewImage(previewLabel, (String) e.getItem());
                 }
             });
+
 
             commandCopyButton.addActionListener(e -> {
                 String commandText = commandField.getText();
@@ -123,8 +129,13 @@ public class Main {
                 String apiKey = apiKeyField.getText();
                 String selectedModel = (String) modelComboBox.getSelectedItem();
                 generateButton.setEnabled(false);
+                previewLabel.setVisible(false);
                 generate(nickname, apiKey, selectedModel);
             });
+
+            saveModelsCheckbox = new JCheckBox("Save generated models");
+            saveModelsCheckbox.setForeground(Color.WHITE);
+            saveModelsCheckbox.setOpaque(false); // Чтобы он не имел фона (если dark theme)
 
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.insets = new Insets(5, 5, 5, 5);
@@ -141,15 +152,16 @@ public class Main {
             gbc.gridy = 9; frame.add(newModelLabel, gbc);
             gbc.gridy = 10; frame.add(newModelField, gbc);
             gbc.gridy = 11; frame.add(modelCopyButton, gbc);
-            gbc.gridy = 12; frame.add(generateButton, gbc);
+            gbc.gridy = 12; frame.add(saveModelsCheckbox, gbc);
+            gbc.gridy = 13; frame.add(generateButton, gbc);
 
             // === Правый блок с наложением превью ===
             logTextArea = new JTextPane();
             logTextArea.setEditable(false);
             JScrollPane scrollPane = new JScrollPane(logTextArea);
-            scrollPane.setBounds(0, 0, 450, 460); // Размер панели логов
+            scrollPane.setBounds(0, 0, 450, 480); // Размер панели логов
 
-            previewLabel.setBounds(285, 295, 150, 150);
+            previewLabel.setBounds(300, 315, 150, 150);
 
             JLayeredPane layeredPane = new JLayeredPane();
             layeredPane.setPreferredSize(new Dimension(450, 460));
@@ -181,40 +193,10 @@ public class Main {
             updatePreviewImage(previewLabel, (String) modelComboBox.getSelectedItem());
 
 
-            openHtmlWindow();
+
         });
     }
 
-    private static void openHtmlWindow() {
-        JFrame frame = new JFrame("HTML + JS Окно");
-        JFXPanel jfxPanel = new JFXPanel(); // Инициализирует JavaFX среду
-
-        frame.add(jfxPanel);
-        frame.setSize(800, 600);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-
-        Platform.runLater(() -> {
-            WebView webView = new WebView();
-            WebEngine engine = webView.getEngine();
-
-            // Загружаем внешний сайт
-            engine.setUserAgent("Mozilla/5.0 (Windows; Windows NT 6.2; x64) AppleWebKit/533.12 (KHTML, like Gecko) Chrome/49.0.2538.379 Safari/603.7 Edge/15.95236");
-
-            // Устанавливаем обработчик, который выполнит JS после полной загрузки страницы
-            engine.getLoadWorker().stateProperty().addListener((obs, oldState, newState) -> {
-                if (newState == javafx.concurrent.Worker.State.SUCCEEDED) {
-                    // Выполняем JS-код после загрузки
-                    engine.executeScript("alert('JavaScript выполнен из Java');");
-
-                    // Пример: изменить текст на странице
-                    engine.executeScript("document.body.style.background = 'lightyellow';");
-                }
-            });
-
-            jfxPanel.setScene(new Scene(webView));
-        });
-    }
 
     private static void updatePreviewImage(JLabel label, String model) {
         String path = switch (model) {
@@ -325,20 +307,6 @@ public class Main {
         }
     }
 
-    private static void testGen(String data, String selectedModel) {
-
-        if (!data.isEmpty()) {
-
-
-
-
-
-        } else {
-            sendLogRed("Please provide a nickname or a link to the texture!");
-            enableButton();
-        }
-    }
-
     public static void endGeneration(String cmdName, String cmdData, String bdName, String bdData) {
 
         sendLog("Command:");
@@ -349,23 +317,14 @@ public class Main {
         setNewModelFieldText(bdData);
         saveFiles(cmdName, cmdData, bdName, Utils.compressToGZIP(bdData));
         enableButton();
+       try {
+           sendLog(generatePreviewLink(bdData));
+       } catch (Exception ignored){
+
+       }
         sendLog("Telegram: https://t.me/promej");
         sendLog("Source: https://github.com/PrometheuzzZ/ModelGenerator");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
-        sendLog("");
+
 
        /* JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -400,6 +359,16 @@ public class Main {
             dialog.dispose();
             enableButton();
         }); */
+    }
+
+    public static String generatePreviewLink(String modelCode) throws IOException {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        try (GZIPOutputStream gzip = new GZIPOutputStream(byteStream)) {
+            gzip.write(modelCode.getBytes(StandardCharsets.UTF_8));
+        }
+        byte[] compressed = byteStream.toByteArray();
+        String encoded = URLEncoder.encode(Base64.getEncoder().encodeToString(compressed), StandardCharsets.UTF_8);
+        return "https://pjst.ru/bdengine/index.php?model=" + encoded;
     }
 
     private static void copyToClipboard(String text) {
@@ -465,6 +434,7 @@ public class Main {
 
     public static void enableButton() {
         generateButton.setEnabled(true);
+
     }
 
     private static void setDarkTheme() {

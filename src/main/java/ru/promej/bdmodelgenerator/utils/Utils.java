@@ -117,6 +117,10 @@ public class Utils {
     }
 
     public static void saveFiles(String cmdName, String cmdData, String bdName, String bdData) {
+        if (saveModelsCheckbox == null || !saveModelsCheckbox.isSelected()) {
+            sendLog("Model saving is disabled (checkbox unchecked).");
+            return;
+        }
 
         String currentDirectory = System.getProperty("user.dir");
 
@@ -132,8 +136,6 @@ public class Utils {
         } catch (IOException e) {
             sendLogRed("Error saving files: " + e.getMessage());
         }
-
-
     }
 }
 
