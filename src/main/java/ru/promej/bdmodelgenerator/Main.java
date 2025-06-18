@@ -5,12 +5,6 @@ import ru.promej.bdmodelgenerator.utils.Utils;
 
 
 
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -30,6 +24,9 @@ import static ru.promej.bdmodelgenerator.Generator.*;
 import static ru.promej.bdmodelgenerator.utils.Utils.saveFiles;
 
 public class Main {
+
+    public static final String TEST_SKIN = "https://i.ibb.co/JWVGGZCn/steve.png";
+    public static final String TEST_CAPE = "https://i.ibb.co/Kp4g6d1d/Skin-MC-Cape-89948.png";
 
     private static JTextPane logTextArea;
     private static JButton generateButton;
@@ -196,7 +193,6 @@ public class Main {
 
         });
     }
-
 
     private static void updatePreviewImage(JLabel label, String model) {
         String path = switch (model) {

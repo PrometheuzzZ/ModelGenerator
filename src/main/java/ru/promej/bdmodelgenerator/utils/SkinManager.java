@@ -4,9 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import org.mineskin.MineSkinClient;
@@ -23,6 +25,19 @@ public class SkinManager {
         BufferedImage fullBody = createFullBodyAvatar(skin);
 
         saveImage(fullBody, "avatar");
+    }
+
+    public static String bufferedImageToBase64(BufferedImage image) {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", outputStream); // PNG по умолчанию
+            byte[] imageBytes = outputStream.toByteArray();
+            String base64 = Base64.getEncoder().encodeToString(imageBytes);
+            return "data:image/png;base64," + base64;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static BufferedImage createFullBodyAvatar(BufferedImage skin) {
@@ -197,6 +212,16 @@ public class SkinManager {
         return fakeHead;
     }
 
+    public static BufferedImage genFakeSteve8(){
+
+        return loadImageFromResources("image/fake/8.png");
+    }
+
+    public static BufferedImage genFakeSteve9(){
+
+        return loadImageFromResources("image/fake/9.png");
+    }
+
     public static void saveImage(BufferedImage image, String name) {
         try {
             File outputFile = new File(name+".png");
@@ -305,6 +330,7 @@ public class SkinManager {
         graphics.drawImage(upnd, null, 40, 0);
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
+        System.out.println("body1:"+bufferedImageToBase64(body1));
         return body1;
     }
 
@@ -331,6 +357,7 @@ public class SkinManager {
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
         graphics.drawImage(downnd, null, 48, 0);
+        System.out.println("body2:"+bufferedImageToBase64(body2));
         return body2;
     }
 
@@ -409,6 +436,7 @@ public class SkinManager {
         graphics.drawImage(upnd, null, 40, 0);
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
+        System.out.println("rightArm1:"+bufferedImageToBase64(right_arm1));
         return right_arm1;
     }
 
@@ -435,6 +463,7 @@ public class SkinManager {
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
         graphics.drawImage(downnd, null, 48, 0);
+        System.out.println("rightArm2:"+bufferedImageToBase64(right_arm2));
         return right_arm2;
     }
 
@@ -513,6 +542,7 @@ public class SkinManager {
         graphics.drawImage(upnd, null, 40, 0);
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
+        System.out.println("leftArm1:"+bufferedImageToBase64(left_arm1));
         return left_arm1;
     }
 
@@ -539,6 +569,7 @@ public class SkinManager {
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
         graphics.drawImage(downnd, null, 48, 0);
+        System.out.println("leftArm2:"+bufferedImageToBase64(left_arm2));
         return left_arm2;
     }
 
@@ -565,6 +596,7 @@ public class SkinManager {
         graphics.drawImage(upnd, null, 40, 0);
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
+        System.out.println("rightLeg1:"+bufferedImageToBase64(right_leg1));
         return right_leg1;
     }
 
@@ -591,6 +623,7 @@ public class SkinManager {
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
         graphics.drawImage(downnd, null, 48, 0);
+        System.out.println("rightLeg2:"+bufferedImageToBase64(right_leg2));
         return right_leg2;
     }
 
@@ -617,6 +650,7 @@ public class SkinManager {
         graphics.drawImage(upnd, null, 40, 0);
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
+        System.out.println("leftLeg1:"+bufferedImageToBase64(left_leg1));
         return left_leg1;
     }
 
@@ -643,6 +677,7 @@ public class SkinManager {
         graphics.drawImage(rightnd, null, 32, 8);
         graphics.drawImage(leftnd, null, 48, 8);
         graphics.drawImage(downnd, null, 48, 0);
+        System.out.println("leftLeg2:"+bufferedImageToBase64(left_leg2));
         return left_leg2;
     }
 
