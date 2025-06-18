@@ -16,9 +16,9 @@ This project is an entity generator for Block Displays featuring Cape, Plushies,
 |---|---|---|
 | ![MiniStand](https://block-display.com/wp-content/uploads/2025/06/img_68523c8f9f79c3.92085290.png) | ![Mojang](https://block-display.com/wp-content/uploads/2025/06/img_68523d1cad32c6.23253385.png) | ![FakeSteve](https://block-display.com/wp-content/uploads/2025/06/img_68523d71683518.71895162.png) |
 
-[Cape](https://block-display.com/bd/51086/)
-
-![Cape](https://block-display.com/wp-content/uploads/2025/06/img_68523e0a78ef99.31273575.png)
+|  | [Cape](https://block-display.com/bd/51086/) |  |
+|---|---|---|
+| ![tran](https://i.ibb.co/mrG5G8N0/450tran.png) | ![Cape](https://block-display.com/wp-content/uploads/2025/06/img_68523e0a78ef99.31273575.png) | ![tran](https://i.ibb.co/mrG5G8N0/450tran.png) |
 
 ## Usage
 
