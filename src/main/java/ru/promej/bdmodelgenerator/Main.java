@@ -313,11 +313,7 @@ public class Main {
         setNewModelFieldText(bdData);
         saveFiles(cmdName, cmdData, bdName, Utils.compressToGZIP(bdData));
         enableButton();
-       try {
-           sendLog(generatePreviewLink(bdData));
-       } catch (Exception ignored){
 
-       }
         sendLog("Telegram: https://t.me/promej");
         sendLog("Source: https://github.com/PrometheuzzZ/ModelGenerator");
 
@@ -357,15 +353,6 @@ public class Main {
         }); */
     }
 
-    public static String generatePreviewLink(String modelCode) throws IOException {
-        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-        try (GZIPOutputStream gzip = new GZIPOutputStream(byteStream)) {
-            gzip.write(modelCode.getBytes(StandardCharsets.UTF_8));
-        }
-        byte[] compressed = byteStream.toByteArray();
-        String encoded = URLEncoder.encode(Base64.getEncoder().encodeToString(compressed), StandardCharsets.UTF_8);
-        return "https://pjst.ru/bdengine/index.php?model=" + encoded;
-    }
 
     private static void copyToClipboard(String text) {
         StringSelection selection = new StringSelection(text);
