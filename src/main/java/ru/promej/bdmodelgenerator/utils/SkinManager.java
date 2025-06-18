@@ -1,6 +1,6 @@
 package ru.promej.bdmodelgenerator.utils;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.mineskin.MineSkinClient;
 import org.mineskin.exception.MineSkinRequestException;
 import org.mineskin.response.MineSkinResponse;
@@ -20,11 +22,11 @@ import javax.imageio.ImageIO;
 public class SkinManager {
 
     public static void main(String[] args) {
-        BufferedImage skin = Utils.getSkin("https://s.namemc.com/i/a912449d4623b77d.png");
+        BufferedImage skin = Utils.getSkin("https://s.namemc.com/i/595c66c5641810b8.png");
 
-        BufferedImage fullBody = createFullBodyAvatar(skin);
+        BufferedImage fullBody = skinToStatue(skin);
 
-        saveImage(fullBody, "avatar");
+        saveImage(fullBody, "test");
     }
 
     public static String bufferedImageToBase64(BufferedImage image) {
@@ -38,6 +40,190 @@ public class SkinManager {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static BufferedImage skinToStatue(BufferedImage skin){
+
+        skin = mergeOverlay(skin);
+
+        BufferedImage overlay_three = loadImageFromResources("image/statue/overlay_3.png");
+
+
+
+        BufferedImage overlay_one = loadImageFromResources("image/statue/overlay_1.png");
+
+        skin = applyOverlay(skin, overlay_one);
+
+        skin = stoneifySkin(skin, true);
+
+        skin = applyOverlay(skin, overlay_three);
+
+        BufferedImage overlay_two = loadImageFromResources("image/statue/overlay_2.png");
+
+        skin = applyOverlay(skin, overlay_two);
+
+        return skin;
+
+    }
+
+    public static BufferedImage mergeOverlay(BufferedImage skin){
+
+
+        BufferedImage out = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = out.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+
+        /*--------------------------------------------------
+         * 1) Копируем весь исходник
+         *-------------------------------------------------*/
+        g.setComposite(AlphaComposite.Src);     // полная замена
+        g.drawImage(skin, 0, 0, null);
+
+        /*--------------------------------------------------
+         * 2) Переносим элементы Layer 2 поверх Layer 1
+         *-------------------------------------------------*/
+        g.setComposite(AlphaComposite.SrcOver); // обычное наложение
+
+        // Hat
+        g.drawImage(skin, 0, 0, 32, 16, 32, 0, 64, 16, null);
+
+        // Jacket
+        g.drawImage(skin, 16, 16, 40, 32, 16, 32, 40, 48, null);
+
+        // Right arm (outer)
+        g.drawImage(skin, 40, 16, 56, 32, 40, 32, 56, 48, null);
+
+        // Left arm (outer)
+        g.drawImage(skin, 32, 48, 48, 64, 48, 48, 64, 64, null);
+
+        // Right leg (outer)
+        g.drawImage(skin, 0, 16, 16, 32, 0, 32, 16, 48, null);
+
+        // Left leg (outer)
+        g.drawImage(skin, 16, 48, 32, 64, 0, 48, 16, 64, null);
+
+        /*--------------------------------------------------
+         * 3) Зачищаем «старые» прямоугольники Layer 2
+         *-------------------------------------------------*/
+        g.setComposite(AlphaComposite.Clear);
+
+        // Hat
+        g.fillRect(32, 0, 32, 16);
+
+        // Jacket
+        g.fillRect(16, 32, 24, 16);
+
+        // Right arm (outer)
+        g.fillRect(40, 32, 16, 16);
+
+        // Left arm (outer)
+        g.fillRect(48, 48, 16, 16);
+
+        // Right leg (outer)
+        g.fillRect(0, 32, 16, 16);
+
+        // Left leg (outer)
+        g.fillRect(0, 48, 16, 16);
+
+        g.dispose();
+        return out;
+
+
+    }
+
+    public static BufferedImage applyOverlay(BufferedImage base, BufferedImage overlay) {
+
+        int w = base.getWidth(), h = base.getHeight();
+        if (w != overlay.getWidth() || h != overlay.getHeight()) {
+            throw new IllegalArgumentException("Размеры base и overlay не совпадают!");
+        }
+
+        BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = out.createGraphics();
+
+        // копируем базу
+        g.setComposite(AlphaComposite.Src);
+        g.drawImage(base, 0, 0, null);
+
+        // накладываем оверлей (прозрачность overlay сохранится)
+        g.setComposite(AlphaComposite.SrcOver);
+        g.drawImage(overlay, 0, 0, null);
+
+        g.dispose();
+        return out;
+    }
+
+    public static BufferedImage stoneifySkin(BufferedImage skin, boolean addMoss) {
+        int w = skin.getWidth();
+        int h = skin.getHeight();
+
+        BufferedImage out = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        ThreadLocalRandom rnd = ThreadLocalRandom.current();
+
+        final float STONE_HUE   = 0.58f;   // ⇽ сдвиг в холодный сектор
+        final float TARGET_SAT  = 0.03f;   // почти нет цвета
+        final float MIN_V       = 0.2f;
+        final float MAX_V       = 0.60f;
+        final int   NOISE_RANGE = 6;
+
+        final Color[] MOSS_SET = {
+                new Color(111,122, 82),        // #6f7a52
+                new Color( 85,105, 64)         // #556940
+        };
+
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+
+                int argb  = skin.getRGB(x, y);
+                int alpha = (argb >>> 24) & 0xff;
+                if (alpha == 0) {                       // прозрачные — как есть
+                    out.setRGB(x, y, argb);
+                    continue;
+                }
+
+                /*--------------------------------------------------
+                 * 1. Grayscale (новый шаг)
+                 *-------------------------------------------------*/
+                int r = (argb >> 16) & 0xff;
+                int g = (argb >>  8) & 0xff;
+                int b =  argb        & 0xff;
+
+                // перцептивная яркость (sRGB)
+                int gray = (int)(0.2126 * r + 0.7152 * g + 0.0722 * b);
+                r = g = b = gray;                       // NEW: чистый Ч/Б
+
+                /*--------------------------------------------------
+                 * 2. Каменный тон + контраст
+                 *-------------------------------------------------*/
+                float[] hsb = Color.RGBtoHSB(r, g, b, null);
+
+                // яркость в «каменный» диапазон
+                float v = MIN_V + (MAX_V - MIN_V) * hsb[2];
+
+                // шум ±NOISE_RANGE
+                v += (rnd.nextInt(NOISE_RANGE * 2 + 1) - NOISE_RANGE) / 255f;
+                v = Math.max(0f, Math.min(1f, v));
+
+                int stoneRGB = Color.HSBtoRGB(
+                        STONE_HUE,        // оттенок после Ч/Б не важен
+                        TARGET_SAT,    // почти серый
+                        v);
+
+                /*--------------------------------------------------
+                 * 3. Мох (опционально)
+                 *-------------------------------------------------*/
+                if (addMoss && rnd.nextFloat() < 0.03f) {
+                    Color moss = MOSS_SET[rnd.nextInt(MOSS_SET.length)];
+                    stoneRGB = moss.getRGB();
+                }
+
+                // вернуть альфу
+                stoneRGB = (alpha << 24) | (stoneRGB & 0x00ffffff);
+                out.setRGB(x, y, stoneRGB);
+            }
+        }
+        return out;
     }
 
     public static BufferedImage createFullBodyAvatar(BufferedImage skin) {
@@ -360,6 +546,8 @@ public class SkinManager {
         System.out.println("body2:"+bufferedImageToBase64(body2));
         return body2;
     }
+
+
 
     public static BufferedImage getRightArm1(BufferedImage skin) {
         BufferedImage right_arm1 = new BufferedImage(64, 64, 2);

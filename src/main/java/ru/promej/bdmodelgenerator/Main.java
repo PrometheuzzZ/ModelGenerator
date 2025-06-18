@@ -39,7 +39,7 @@ public class Main {
     private static String apiKeyMineSkin = "";
     private static final String API_KEY_FILE = "apiKey.txt";
     private static boolean savedApiKey = false;
-    private static final String VERSION = "1.7";
+    private static final String VERSION = "1.8";
 
     public static JCheckBox saveModelsCheckbox;
 
@@ -65,7 +65,7 @@ public class Main {
             JLabel modelLabel = new JLabel("Model:");
             String[] models = {
                     "Plushe // Sit", "Plushe // Stand", "Mini // Sit", "Mini // Stand",
-                    "Mojang", "Fake Steve", "Cape"
+                    "Mojang", "Fake Steve", "Statue" ,"Cape"
             };
             JComboBox<String> modelComboBox = new JComboBox<>(models);
             modelComboBox.setPreferredSize(new Dimension(300, 30));
@@ -196,6 +196,7 @@ public class Main {
 
     private static void updatePreviewImage(JLabel label, String model) {
         String path = switch (model) {
+            case "Statue" -> "/image/previews/statue.png";
             case "Plushe // Sit" -> "/image/previews/plushe_sit.png";
             case "Plushe // Stand" -> "/image/previews/plushe_stand.png";
             case "Mini // Sit" -> "/image/previews/mini_sit.png";
@@ -235,6 +236,13 @@ public class Main {
                 sendLogGreen("MineSkin ApiKey is Valid.");
 
                 switch (selectedModel) {
+
+                    case "Statue" -> {
+                        boolean statueIsValide = validStatue(data, apiKey);
+                        if (!statueIsValide) {
+                            enableButton();
+                        }
+                    }
 
                     case "Mini // Sit" -> {
                         boolean plusheIsValide = validMiniSit(data, apiKey);
