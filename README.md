@@ -4,13 +4,12 @@ This project is an entity generator for Block Displays featuring Cape, Plushies,
 
 ## Screenshots
 
-![Screenshot](https://agem.su/bdmodel/sc.png)
+![Screenshot](https://img001.prntscr.com/file/img001/kjvUvgW9ShOs2DfYPOiwYA.png)
 
 ## Generation models
 
 1. [Plushe](https://block-display.com/bd/31679/)
 2. [Mojang Avatar](https://block-display.com/bd/31677/)
-3. [Sleep Animation](https://block-display.com/bd/31796/)
 4. [Fake Steve / Wooden figure](https://block-display.com/bd/31848/)
 5. [Cape](https://block-display.com/bd/31670/)
 
