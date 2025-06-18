@@ -65,7 +65,7 @@ public class Main {
             JLabel modelLabel = new JLabel("Model:");
             String[] models = {
                     "Plushe // Sit", "Plushe // Stand", "Mini // Sit", "Mini // Stand",
-                    "Mojang", "Sleep Animation", "Fake Steve", "Cape"
+                    "Mojang", "Fake Steve", "Cape"
             };
             JComboBox<String> modelComboBox = new JComboBox<>(models);
             modelComboBox.setPreferredSize(new Dimension(300, 30));
