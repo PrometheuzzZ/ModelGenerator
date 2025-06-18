@@ -8,10 +8,17 @@ This project is an entity generator for Block Displays featuring Cape, Plushies,
 
 ## Generation models
 
-1. [Plushe](https://block-display.com/bd/31679/)
-2. [Mojang Avatar](https://block-display.com/bd/31677/)
-4. [Fake Steve / Wooden figure](https://block-display.com/bd/31848/)
-5. [Cape](https://block-display.com/bd/31670/)
+| [Plushe // Sit](https://block-display.com/bd/51070/) | [Plushe // Stand](https://block-display.com/bd/51073/) | [Mini // Sit](https://block-display.com/bd/51077/) |
+|---|---|---|
+| ![Sit](https://block-display.com/wp-content/uploads/2025/06/img_68523b1183d233.86243456.png) | ![Stand](https://block-display.com/wp-content/uploads/2025/06/img_68523b02022916.97648147.png) | ![MiniSit](https://block-display.com/wp-content/uploads/2025/06/img_68523c0942e9e1.14845399.png) |
+
+| [Mini // Stand](https://block-display.com/bd/51080/) | [Mojang Avatar](https://block-display.com/bd/51082/) | [Fake Steve](https://block-display.com/bd/51084/) |
+|---|---|---|
+| ![MiniStand](https://block-display.com/wp-content/uploads/2025/06/img_68523c8f9f79c3.92085290.png) | ![Mojang](https://block-display.com/wp-content/uploads/2025/06/img_68523d1cad32c6.23253385.png) | ![FakeSteve](https://block-display.com/wp-content/uploads/2025/06/img_68523d71683518.71895162.png) |
+
+|  | [Cape](https://block-display.com/bd/51086/) |  |
+|---|---|---|
+| ![tran](https://i.ibb.co/mrG5G8N0/450tran.png) | ![Cape](https://block-display.com/wp-content/uploads/2025/06/img_68523e0a78ef99.31273575.png) | ![tran](https://i.ibb.co/mrG5G8N0/450tran.png) |
 
 ## Usage
 
