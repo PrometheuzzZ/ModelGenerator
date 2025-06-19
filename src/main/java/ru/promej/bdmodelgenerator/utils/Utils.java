@@ -21,7 +21,7 @@ import static ru.promej.bdmodelgenerator.Main.*;
 public class Utils {
 
     public static void main(String[] args) {
-        System.out.println(checkMineSkinApiKey("msk_TO60qmHV_AN6dSwIAuuZJjt9gj6Y4Dvw5zfqiOkzLahlSAuWRB7G_93Cw6Jn5igLQMd9OHf0e"));;
+        System.out.println(checkMineSkinApiKey(""));
     }
 
     public static boolean validSkinSize(BufferedImage image) {
@@ -93,6 +93,11 @@ public class Utils {
     }
 
     public static boolean checkMineSkinApiKey(String key) {
+
+
+        if(key.isEmpty()){
+            return false;
+        }
 
         String urlString = "https://api.mineskin.org/v2/delay";
         try {
