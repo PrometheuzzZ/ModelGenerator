@@ -2,9 +2,7 @@
 package ru.promej.bdmodelgenerator.utils;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
@@ -21,6 +19,10 @@ import javax.imageio.ImageIO;
 import static ru.promej.bdmodelgenerator.Main.*;
 
 public class Utils {
+
+    public static void main(String[] args) {
+        System.out.println(checkMineSkinApiKey("msk_TO60qmHV_AN6dSwIAuuZJjt9gj6Y4Dvw5zfqiOkzLahlSAuWRB7G_93Cw6Jn5igLQMd9OHf0e"));;
+    }
 
     public static boolean validSkinSize(BufferedImage image) {
         if (image.getHeight() != 64) {
@@ -91,23 +93,53 @@ public class Utils {
     }
 
     public static boolean checkMineSkinApiKey(String key) {
-        if (key.length() != 64) {
-            return false;
-        }
-        String urlString = "https://api.mineskin.org/get/delay";
+
+        String urlString = "https://api.mineskin.org/v2/delay";
         try {
             URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "BDModelGenerator/v1.0");
             connection.setRequestProperty("Authorization", "Bearer " + key);
-            if (connection.getResponseCode() == 200) {
+            connection.setRequestProperty("Accept", "application/json"); // Добавлен заголовок
+
+            int responseCode = connection.getResponseCode();
+            sendLog("MineSkin API key Response Code: " + responseCode);
+
+
+
+            if (responseCode == 200) {
                 saveApiKey(key);
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        connection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                System.out.println("Response Body: " + response.toString());
                 return true;
             }
-            if (connection.getResponseCode() == 403) {
+            if (responseCode == 403) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(
+                        connection.getErrorStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                System.out.println("Response Body: " + response.toString());
                 return false;
             }
+
+            System.out.println(responseCode);
+
             connection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();

@@ -13,7 +13,7 @@ jar {
 
 shadowJar {
     archiveBaseName.set("ModelGenerator")
-    archiveVersion.set("1.8")
+    archiveVersion.set("1.8.1")
     archiveClassifier.set("")
 }
 

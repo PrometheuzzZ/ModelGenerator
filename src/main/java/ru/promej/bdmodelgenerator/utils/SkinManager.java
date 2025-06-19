@@ -16,15 +16,19 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.mineskin.MineSkinClient;
 import org.mineskin.exception.MineSkinRequestException;
 import org.mineskin.response.MineSkinResponse;
+import ru.promej.bdmodelgenerator.Main;
 
 import javax.imageio.ImageIO;
 
 public class SkinManager {
 
     public static void main(String[] args) {
-        BufferedImage skin = Utils.getSkin("https://s.namemc.com/i/595c66c5641810b8.png");
 
-        BufferedImage fullBody = skinToStatue(skin);
+
+
+        BufferedImage skin = Utils.getSkin("https://agemagic.net/skinsystem/temp/skin_1bb87022ec63b865.png");
+
+        BufferedImage fullBody = mergeOverlay(skin);
 
         saveImage(fullBody, "test");
     }

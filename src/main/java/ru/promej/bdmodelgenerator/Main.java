@@ -13,14 +13,11 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ItemEvent;
 import java.io.*;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
 import java.util.Date;
-import java.util.zip.GZIPOutputStream;
 
 import static ru.promej.bdmodelgenerator.Generator.*;
+import static ru.promej.bdmodelgenerator.utils.Utils.checkMineSkinApiKey;
 import static ru.promej.bdmodelgenerator.utils.Utils.saveFiles;
 
 public class Main {
@@ -39,11 +36,13 @@ public class Main {
     private static String apiKeyMineSkin = "";
     private static final String API_KEY_FILE = "apiKey.txt";
     private static boolean savedApiKey = false;
-    private static final String VERSION = "1.8";
+    private static final String VERSION = "1.8.1";
 
     public static JCheckBox saveModelsCheckbox;
 
     public static void main(String[] args) {
+
+
 
         setDarkTheme();
 
@@ -65,7 +64,7 @@ public class Main {
             JLabel modelLabel = new JLabel("Model:");
             String[] models = {
                     "Plushe // Sit", "Plushe // Stand", "Mini // Sit", "Mini // Stand",
-                    "Mojang", "Fake Steve", "Statue" ,"Cape"
+                    "Mojang", "Fake Steve", "Statue" ,"Cape", "Test API key"
             };
             JComboBox<String> modelComboBox = new JComboBox<>(models);
             modelComboBox.setPreferredSize(new Dimension(300, 30));
@@ -227,9 +226,10 @@ public class Main {
 
         if (!data.isEmpty()) {
 
+            sendLog("Checking MineSkin ApiKey");
+
             boolean keyIsValide = Utils.checkMineSkinApiKey(apiKey);
 
-            sendLog("Checking MineSkin ApiKey");
 
             if (keyIsValide) {
 
@@ -292,22 +292,43 @@ public class Main {
                             enableButton();
                         }
                     }
+
                     case "Fake Steve" -> {
                         boolean fakeSteveIsValide = validFakeSteve(data, apiKey);
                         if (!fakeSteveIsValide) {
                             enableButton();
                         }
                     }
+
+
                 }
 
 
             } else {
-                sendLogRed("Invalid MineSkin ApiKey!");
+                sendLogRed("Invalid MineSkin API key!");
                 enableButton();
             }
         } else {
-            sendLogRed("Please provide a nickname or a link to the texture!");
-            enableButton();
+
+            if(selectedModel.contains("Test API key")){
+
+                sendLog("Check MineSkin API key...");
+
+                boolean apiKeyValide = checkMineSkinApiKey(apiKeyField.getText());
+
+                if(apiKeyValide){
+                    sendLogGreen("MineSkin API key is Valid.");
+                } else {
+                    sendLogRed("Invalid MineSkin API key!");
+                }
+
+
+                enableButton();
+            } else {
+                sendLogRed("Please provide a nickname or a link to the texture!");
+                enableButton();
+            }
+
         }
     }
 
@@ -459,7 +480,7 @@ public class Main {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(API_KEY_FILE))) {
                 writer.write(apiKey);
                 savedApiKey = true;
-                System.out.println("API Key saved!");
+                sendLogGreen("API Key saved!");
             } catch (IOException e) {
 
             }
